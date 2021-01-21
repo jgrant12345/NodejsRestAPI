@@ -20,7 +20,7 @@ router.get('/title/:title', async (req,res) => {
         console.log("hi")
         const post = await Post.find(
             {title: "randomPost"}
-        ).limit(2)
+        )
         res.send(post)
     } catch(err){
         res.send({messages:err})
@@ -29,11 +29,12 @@ router.get('/title/:title', async (req,res) => {
 // SUBMITS A POST
 router.post('/', async (req,res) => {
     const post = new Post({
-        title: req.body.title,
-        description: req.body.description
+        Title: req.body.Title,
+        Description: req.body.Description
     })
    
     try {
+        
         const savedPost = await post.save();
     res.json(savedPost)
     } catch (err){ 
@@ -64,5 +65,19 @@ router.delete('/:postId', async (req, res) => {
     res.json({message:err})
    }
 });
+
+//UPDATE POST
+router.patch('/:PostId', async(req,res) => {
+    try{    
+        
+        const updatedPost = await Post.updateOne({_id: req.params.PostId},
+                                                {$set: {Completed:req.body.Completed}}
+        );
+                                            
+    res.json(updatedPost)
+    } catch(err){
+        res.json({message: err})
+    }
+})
 
 module.exports = router;
